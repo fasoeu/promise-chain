@@ -1,0 +1,26 @@
+{
+  "name": "promise-waterfall-chain",
+  "version": "1.0.0",
+  "description": "It allows to execute promises sequentially",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fasoeu/promise-chain.git"
+  },
+  "keywords": [
+    "promise",
+    "chain",
+    "sequential",
+    "sequeltiality",
+    "waterfall"
+  ],
+  "author": "Fasoeu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fasoeu/promise-chain/issues"
+  },
+  "homepage": "https://github.com/fasoeu/promise-chain#readme"
+}
