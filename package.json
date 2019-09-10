@@ -1,6 +1,6 @@
 {
   "name": "promise-waterfall-chain",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "It allows to execute promises sequentially",
   "main": "index.js",
   "scripts": {
