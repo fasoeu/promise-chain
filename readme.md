@@ -1,19 +1,37 @@
-# Promise Chain
+# Promise Waterfall Chain
 
-This module extends Promise object adding `chain` method.
-Chain method accepts multiple arguments and/or array of objects. Optimally, every item should be a function which returns a Promise.
-If you instead provide items as Promise objects, they will be immediatly executed with unpredictable results.
+This module extends Promise object adding `chain` method to `Promise.prototype` (use it carefully).\
+`Promise.chain` method accepts a list of parameters and/or mixed array(s).\
+For a better flow control, every item should be a function which returns a Promise.\
 Every provided function can use the result of the promise returned by the previous function.
 
+Other cases for input items:
+* Primitive values will be converted into functions returning promises resolved with the value itself.
+* Promises will be immediately executed with unpredictable results.
+
+## Example
 ```js
 require('promise-waterfall-chain');
 
-Promise.chain([
-    ()=>Promise.resolve(7),
+let pc = Promise.chain([
+    'Hello World!',
+    (str)=>{
+        console.log(str);
+        return Promise.resolve(7);
+    },
     (prev_result)=>Promise.resolve(++prev_result)
 ])
 .then(console.log)
-.catch(console.log)  // Output: 8
+.catch(console.log);
+
+pc.then(()=>{
+    console.log('All done!');
+});
+/* Output:
+Hello World!
+8
+All done!
+*/
 ```
 
 ## Install
