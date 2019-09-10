@@ -1,3 +1,24 @@
+// private function
+function chain(){
+    try {
+        let args = arguments.length ? Array.from(arguments) : void(0);
+        if (!this.promise_generators.length) {
+            return Promise.resolve.apply(Promise, args);
+        }
+
+        let promise_generator_function = this.promise_generators.shift();            
+        let couldBeAPromise = promise_generator_function.apply(null, args);
+        if (!(couldBeAPromise instanceof Promise)) {
+            couldBeAPromise = Promise.resolve(couldBeAPromise);
+        }
+        return couldBeAPromise.then(res=>{
+            return chain.call(this, res);
+        });
+    } catch (err) {
+        return Promise.reject(err);
+    }
+}
+
 class PromiseChain {
     constructor(){
         let promises = [];
@@ -8,27 +29,7 @@ class PromiseChain {
         }
 
         this.promise_generators = promises.map(el=>typeof el==='function'? el : ()=>Promise.resolve(el));
-        
-        return this.run();
-    }
-    run(){
-        try {
-            let args = arguments.length ? Array.from(arguments) : void(0);
-            if (!this.promise_generators.length) {
-                return Promise.resolve.apply(Promise, args);
-            }
-
-            let promise_generator_function = this.promise_generators.shift();            
-            let couldBeAPromise = promise_generator_function.apply(null, args);
-            if (!(couldBeAPromise instanceof Promise)) {
-                couldBeAPromise = Promise.resolve(couldBeAPromise);
-            }
-            return couldBeAPromise.then(res=>{
-                return this.run(res);
-            });
-        } catch (err) {
-            return Promise.reject(err);
-        }
+        return chain.call(this);
     }
 }
 
