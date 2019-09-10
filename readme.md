@@ -3,12 +3,12 @@
 This module extends Promise object adding `chain` method to `Promise.prototype` (use it carefully).\
 `Promise.chain` method accepts a list of arguments and/or mixed array(s).\
 For a better flow control, every item should be a function which returns a Promise.\
-The resolved value of these generated promises will be passed as argument to the next functions.
+The resolved value of these generated promises are be passed as argument to the next functions.
 
 If other input items types are provided:
-* `Primitive values` will be converted into functions returning promises resolved with the value itself.
-* Functions returned results (Ex.: `res`) that are not promises will be converted into resolved values of a Promise: Ex.: `res=>Promise.resolve(res)`
-* `Promise` arguments will generate unpredictable behavior.
+* `Primitive values` are converted into functions returning promises resolved with the value itself.
+* Functions returned results (Ex.: `res`) that are not promises are converted into resolved values of a Promise: Ex.: `res=>Promise.resolve(res)`
+* `Promise` arguments may lead unpredictable behaviors.
 
 ## Example
 ```js
@@ -28,6 +28,7 @@ let pc = Promise.chain(
 pc.then(()=>{
     console.log('All done!');
 });
+
 /* Output:
 Hello World!
 8
@@ -38,7 +39,7 @@ All done!
 ## Install
 `npm install promise-waterfall-chain`
 
-## How to use (see `examples`)
+## Other examples (see `examples` folder)
 ```js
 require('promise-waterfall-chain');
 
