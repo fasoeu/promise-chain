@@ -1,6 +1,6 @@
-require(__dirname+'/../../promise-chain');
+require(__dirname+'/../../promise-waterfall-chain');
+// Example 1: mixed array (functions, promises and other values)
 let promises = [];
-
 promises.push(()=>new Promise((resolve, reject)=>{
     console.log('First promise starts');
     setTimeout(()=>{
@@ -18,7 +18,7 @@ promises.push(res=>new Promise((resolve, reject)=>{
 promises.push((prev_res)=>new Promise((resolve, reject)=>{
     console.log('Another promise starts', prev_res);
     setTimeout(()=>{
-        console.log('Another promise rejected');
+        console.log('This promise is going to be rejected');
         reject('Random error');
     }, 1000);
 }));
@@ -26,8 +26,8 @@ promises.push(()=>3);
 promises.push((prev_res)=>new Promise((resolve, reject)=>{
     console.log('A new promise starts', prev_res);
     setTimeout(()=>{
-        console.log('A new promise ended');
-        resolve('A new result');
+        console.log('The new promise ended');
+        resolve('The new result');
     }, 1000);
 }));
 promises.push(()=>{throw 'Suddenly an error';});
@@ -46,9 +46,28 @@ Promise.chain(promises)
     return console.log('This message will be shown in any case!');
 });
 
+// Example 2: use results of previous promise
 Promise.chain([
     ()=>Promise.resolve(7),
     (prev_result)=>Promise.resolve(++prev_result)
 ])
-.then(console.log)
-.catch(console.log)  // Output: 8
+.then(console.log) // Output: 8
+.catch(console.log)
+
+// Example 3: list of items
+Promise.chain(1,()=>Promise.resolve(2),3)
+.then(res=>{
+    console.log('Here we go with the final result: ', res); // Output: 3
+})
+
+// Example 4: throw a catchable error
+let pc = Promise.chain(
+    [1,2],
+    (s)=>Promise.reject(s),
+    (r)=>Promise.resolve(r+1)
+);
+pc.then(console.log) // Output: 3 but it would never fire
+.catch(console.log) // Output: 2
+.then(()=>{
+    console.log('This like a "finally" of a try/catch/finally construct');
+});
